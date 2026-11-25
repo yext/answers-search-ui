@@ -55,7 +55,9 @@ export default class ResultsHeaderComponent extends Component {
      * The compiled custom results count template, if the user specifies one.
      * @type {Function}
      */
-    this._compiledResultsCountTemplate = this._renderer.compile(this._config.resultsCountTemplate);
+    this._compiledResultsCountTemplate = this._config.resultsCountTemplate
+      ? this._renderer.compile(this._config.resultsCountTemplate)
+      : () => '';
 
     /**
      * Array of nlp filters in the search response.
